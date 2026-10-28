@@ -252,6 +252,23 @@ Record approved durable app decisions in the project's `AGENTS.md` or the app's 
 
 ## Approved Project Decisions
 
+### Feature — BottomBar redesign — Approved
+
+- Home and Settings use a centered, compact floating segmented pill rather than an edge-to-edge or full-width navigation bar. The outer control uses the theme surface, border, radius, and elevation tokens; the selected segment uses the primary color with its semantic foreground, while the inactive segment remains on the surface.
+- Keep both destinations equally sized, visibly labeled, and accessible as tabs with selected state. Pressing the active tab does not navigate; switching tabs retains replacement navigation.
+- Use `useScreenPresence()` for the control's restrained entrance and a shared native-driver spring selection indicator from `src/helpers/animate.ts` for transitions between tabs. Keep the existing floating-control stage responsible for safe-area placement and scroll-to-top handoff.
+- The floating dock width is a named theme size token and adapts to narrow viewports. No new dependency or persisted state is introduced.
+- Feature validation: TypeScript, Expo dependency check, iOS and Android exports, and `git diff --check`. Manually verify tab selection animation, route switching, light/dark contrast, large-text sizing, narrow viewports, and iOS/Android safe-area placement.
+
+### Feature — Home Dashboard redesign — Approved
+
+- Home presents one fictional postpaid account summary, prioritizing the sample total due and remaining data, followed by Pay bill, Data usage, Chat us, and My profile actions.
+- Account, bill, and usage values are local fictional demo data. Bill and payment interactions are informational previews only; no payment, account lookup, or backend request occurs.
+- Keep one clear demo label on the account card. Show the chat summary only when local chat sessions exist, followed by the supplied advertisement labeled as an ad.
+- Home may greet the signed-in demo profile by first name. The account menu uses the existing Profile module action and logout confirmation.
+- Use the shared `useScreenPresence` helper for restrained staggered Home section entrance; do not add dependencies or persistence for Home.
+- Home redesign validation: TypeScript, Expo dependency check, iOS and Android exports, and `git diff --check`; device appearance, accessibility, and large-text behavior require manual verification.
+
 ### Phase 1 — App metadata and native foundation — Approved
 
 - App name: **Direct**. About: “A CelcomDigi mobile app prototype that brings customer support directly into the app through a native IMR and live chat experience.”

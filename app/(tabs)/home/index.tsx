@@ -1,13 +1,14 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Pressable, Text, View, useWindowDimensions } from 'react-native';
+import { Pressable } from 'react-native';
 import { AppScreen } from '../../../src/components/shared/appScreen';
-import { ChatHomeSection } from '../../../src/components/chat/chatHomeSection';
+import { HomeDashboard } from '../../../src/components/home/homeDashboard';
 import { OptionPicker, type PickerOption } from '../../../src/components/shared/optionPicker';
 import { chatConfig } from '../../../src/constants/chat';
 import { profileConfig } from '../../../src/constants/profile';
 import { useAuth } from '../../../src/hooks/useAuth';
 import { useOverlay } from '../../../src/hooks/useOverlay';
+import { useProfile } from '../../../src/hooks/useProfile';
 import { useTheme } from '../../../src/hooks/useTheme';
 
 const homeQuickActions: PickerOption[] = [
@@ -20,8 +21,9 @@ export default function HomeScreen() {
   const router = useRouter();
   const overlay = useOverlay();
   const { signOut } = useAuth();
+  const { profile } = useProfile();
   const { theme } = useTheme();
-  const { fontScale } = useWindowDimensions();
+  const firstName = profile.displayName.trim().split(/\s+/)[0] || 'there';
 
   const openQuickActions = () => overlay.modal({
     title: 'Quick actions',
@@ -34,7 +36,15 @@ export default function HomeScreen() {
           overlay.dismiss(() => {
             if (option.id === 'chat') router.push('/(tabs)/home/chat/record');
             if (option.id === 'profile') router.push('/(tabs)/settings/profile');
-            if (option.id === 'logout') void signOut();
+            if (option.id === 'logout') {
+              overlay.confirmDestructive({
+                title: 'Log out of this demo?',
+                message: 'You will need to sign in again to return to your local demo session.',
+                confirmLabel: 'Log out',
+                cancelLabel: 'Stay signed in',
+                onConfirm: () => { void signOut(); },
+              });
+            }
           });
         }}
       />
@@ -43,12 +53,12 @@ export default function HomeScreen() {
 
   return (
     <AppScreen
-      title="Home"
-      subtitle="Support, together in one place."
+      title={`Hi, ${firstName}`}
+      subtitle="Your postpaid account at a glance."
       rightSlot={(
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Open quick actions"
+          accessibilityLabel="Open account and quick actions"
           onPress={openQuickActions}
           style={({ pressed }) => ({
             width: theme.size.touchTarget,
@@ -64,19 +74,7 @@ export default function HomeScreen() {
         </Pressable>
       )}
     >
-      <View style={{ gap: theme.spacing.md, borderRadius: theme.radius.xl, padding: theme.spacing.xl, backgroundColor: theme.colors.primary, ...theme.shadow.card }}>
-        <View style={{ width: theme.size.brandMark, height: theme.size.brandMark, alignItems: 'center', justifyContent: 'center', borderRadius: theme.radius.md, backgroundColor: theme.colors.onPrimary }}>
-          <MaterialCommunityIcons name="headset" size={theme.size.supportActionIcon} color={theme.colors.primary} />
-        </View>
-        <Text style={{ color: theme.colors.onPrimary, fontFamily: theme.fontFamily.bold, fontSize: theme.typography.title.fontSize, lineHeight: theme.typography.title.lineHeight * fontScale, letterSpacing: theme.typography.title.letterSpacing }}>
-          How can we help?
-        </Text>
-        <Text style={{ color: theme.colors.onPrimary, fontFamily: theme.fontFamily.regular, fontSize: theme.typography.body.fontSize, lineHeight: theme.typography.body.lineHeight * fontScale, opacity: theme.opacity.muted }}>
-          Start a guided support chat and return to it later.
-        </Text>
-      </View>
-
-      <ChatHomeSection />
+      <HomeDashboard />
     </AppScreen>
   );
 }

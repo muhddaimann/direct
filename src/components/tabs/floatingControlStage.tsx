@@ -28,24 +28,26 @@ export function FloatingControlStage() {
   }, [showScrollToTop, showTabs, tabOpacity, theme.motion.presenceDurationMs, theme.opacity.full, theme.opacity.hidden, topOpacity]);
 
   const bottomOffset = minimumFloatingControlOffset(theme.layout);
+  const bottomClearance = insets.bottom + bottomOffset;
+  const controlHeight = theme.layout.floatingStageHeight;
 
   return (
     <View
       pointerEvents="box-none"
       style={{
         position: 'absolute',
-        left: theme.spacing.xl,
-        right: theme.spacing.xl,
-        bottom: insets.bottom + bottomOffset,
-        height: theme.layout.floatingStageHeight,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: bottomClearance + controlHeight,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
       }}
     >
-      <Animated.View pointerEvents={showTabs ? 'auto' : 'none'} style={{ position: 'absolute', left: 0, right: 0, opacity: tabOpacity }}>
+      <Animated.View pointerEvents={showTabs ? 'auto' : 'none'} style={{ position: 'absolute', left: 0, right: 0, bottom: bottomClearance, height: controlHeight, alignItems: 'center', justifyContent: 'center', opacity: tabOpacity }}>
         {isRootTab ? <BottomBar activeTab={activeTab} /> : null}
       </Animated.View>
-      <Animated.View pointerEvents={showScrollToTop ? 'auto' : 'none'} style={{ position: 'absolute', opacity: topOpacity }}>
+      <Animated.View pointerEvents={showScrollToTop ? 'auto' : 'none'} style={{ position: 'absolute', bottom: bottomClearance + (controlHeight - theme.size.scrollToTop) / 2, opacity: topOpacity }}>
         {showScrollToTop ? (
           <Pressable
             accessibilityRole="button"

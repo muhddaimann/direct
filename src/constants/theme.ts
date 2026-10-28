@@ -46,6 +46,7 @@ export type ThemeTokens = {
     messageIcon: number;
     supportActionIcon: number;
     themeToggleIcon: number;
+    floatingTabBarWidth: number;
     dialogPreferredWidth: number;
     overlayActionHeight: number;
     sheetHandleHeight: number;
@@ -135,6 +136,7 @@ const sharedTokens = {
     messageIcon: 25,
     supportActionIcon: 22,
     themeToggleIcon: 21,
+    floatingTabBarWidth: 288,
     dialogPreferredWidth: 420,
     overlayActionHeight: 48,
     sheetHandleHeight: 44,

@@ -3,9 +3,10 @@ export const appAbout =
   'A CelcomDigi mobile app prototype that brings customer support directly into the app through a native IMR and live chat experience.';
 export const appSlug = 'direct';
 export const appScheme = 'direct';
-export const appVersion = '0.4.0';
+export const appVersion = '0.5.0';
 export const designDirection = 'Approachable customer support with a blue-and-yellow palette and Inter typography.';
 export const changelog = [
+  '0.5.0 — Redesigned Home and Settings navigation as an animated floating pill.',
   '0.4.0 — Added local simulated chat sessions, records, and transcript sharing.',
   '0.3.0 — Added a session-only Profile Module with editable demo details.',
   '0.2.0 — Added a non-production demo sign-in flow with one-hour local sessions.',
