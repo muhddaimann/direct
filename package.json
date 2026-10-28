@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "direct",
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {
