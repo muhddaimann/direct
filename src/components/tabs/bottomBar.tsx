@@ -1,14 +1,12 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../hooks/useTheme';
 
 type TabName = 'home' | 'settings';
 
 export function BottomBar({ activeTab }: { activeTab: TabName }) {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const { theme } = useTheme();
 
   const tabs: { name: TabName; label: string; icon: 'home-variant' | 'cog-outline'; path: '/(tabs)/home' | '/(tabs)/settings' }[] = [
@@ -20,10 +18,6 @@ export function BottomBar({ activeTab }: { activeTab: TabName }) {
     <View
       accessibilityRole="tablist"
       style={{
-        position: 'absolute',
-        left: theme.spacing.xl,
-        right: theme.spacing.xl,
-        bottom: insets.bottom + theme.spacing.md,
         minHeight: theme.size.touchTarget + theme.spacing.md,
         flexDirection: 'row',
         alignItems: 'center',

@@ -281,3 +281,20 @@ Record approved durable app decisions in the project's `AGENTS.md` or the app's 
 - `userInterfaceStyle` is `automatic`; `expo-system-ui` is required for Android system appearance behavior.
 - The LandingScreen is an intentional scrollable manual-audit surface listing all app metadata, both color palettes, all theme-token groups, and interactive overlay examples. The same local OptionPicker demo appears in the custom modal and sheet; sample choices are ephemeral, do not persist, and do not call a backend.
 - Phase validation: TypeScript check, `npx expo install --check`, public Expo config inspection, iOS/Android exports, and `git diff --check`. Manually verify backdrop and hardware-back cancellation, callback idempotence, sheet drag and safe-area behavior, toast replacement, light/dark status-bar contrast, and Android system-bar coverage in a rebuilt app.
+
+### Phase 4 — Primary navigation — Approved
+
+- Preserve the audit LandingScreen at `/`. Use an Expo Router `(tabs)` group for Home and Settings, with the system tab bar hidden and a shared theme-token-driven floating pill rendered only on the root Home and Settings routes.
+- Root, tab, and nested stacks hide native headers and disable route animations. Nested `demo/` routes are generic full-screen placeholders and do not show the floating tab bar.
+- The floating bar uses `@expo/vector-icons`, accessible tab roles/states and touch targets, and bottom-inset-aware placement. Pressing the active tab does nothing; switching to another root tab uses replacement navigation.
+- The LandingScreen's Home action and Home's prototype logout row use replacement navigation. The logout row is only a navigation demo returning to `/`; there is no authentication/session state, data clearing, or backend logout.
+- Root Home and Settings content clears the floating bar. Phase validation: TypeScript check, iOS Expo export, and `git diff --check`; manually verify navigation, repeated active-tab presses, nested-route bar visibility, safe areas, and route transitions on iOS and Android.
+
+### Phase 5 — Shared screen and control foundations — Approved
+
+- Use shared `AppScreen`, `EmptyState`, `LongList`, and `OptionPicker` components for tab screens. `AppScreen` owns scroll layout, optional header slots, pull-to-refresh wiring, focused-route scroll registration, and component-owned entrance motion. Headers remain in their scrollable content; title uses the semantic heading token, and back/right actions use surface backgrounds.
+- `BarProvider` / `useBar()` owns active scroll-controller registration and scroll-direction hysteresis. Only the focused route controls scroll state. Root Home/Settings show the tab pill at rest or while scrolling up, then hand off to a separate scroll-to-top action while scrolling down. Nested routes never show tabs and can show scroll-to-top after scrolling.
+- Render the floating-control stage from shared tab `AppScreen` content, not as a sibling of the Tabs navigator. Use a fixed-height stage, fade-only handoff, disable pointer interaction for outgoing controls, place controls using bottom insets plus platform-specific theme-token offsets, and reserve control clearance only on root Home/Settings.
+- Use `useOverlay()` directly. Home quick-action selection waits for custom-modal exit using `dismiss(onComplete)`; support navigation pushes the nested demo to preserve Home history, while Settings is a tab replacement. Back controls fall back to the corresponding tab root when no back history exists.
+- Settings appearance selection uses the existing bottom sheet and `OptionPicker`; it updates theme mode in memory for the current session only and is not persisted. Picker samples and support destinations remain local prototypes and do not call a backend.
+- Phase validation: TypeScript check, iOS and Android Expo exports, and `git diff --check`. Manually verify picker selection/dismissal and post-exit navigation, back behavior including direct nested-route entry, focused scroll ownership, floating-control visibility/scroll-to-top/fade interaction, large-text layout, and iOS/Android safe-area placement.

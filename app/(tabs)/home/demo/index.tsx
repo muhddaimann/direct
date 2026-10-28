@@ -1,24 +1,38 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { Pressable, Text, View, useWindowDimensions } from 'react-native';
+import { Text, View, useWindowDimensions } from 'react-native';
+import { AppScreen, AppScreenHeader } from '../../../../src/components/shared/appScreen';
+import { EmptyState } from '../../../../src/components/shared/emptyState';
+import { LongList } from '../../../../src/components/shared/longList';
 import { useTheme } from '../../../../src/hooks/useTheme';
 
+const demoItems = [
+  { id: 'chat', title: 'Live chat', detail: 'A placeholder for in-app messaging.' },
+  { id: 'imr', title: 'Interactive support', detail: 'A placeholder for guided troubleshooting.' },
+  { id: 'help', title: 'Help topics', detail: 'A placeholder for support articles.' },
+  { id: 'contact', title: 'Contact support', detail: 'A placeholder for contact options.' },
+];
+
 export default function HomeDemoScreen() {
-  const router = useRouter();
   const { theme } = useTheme();
   const { fontScale } = useWindowDimensions();
 
   return (
-    <View style={{ flex: theme.layout.fill, justifyContent: 'center', padding: theme.spacing.xl, gap: theme.spacing.lg, backgroundColor: theme.colors.background }}>
-      <Pressable accessibilityRole="button" accessibilityLabel="Go back" onPress={() => router.back()} style={{ minHeight: theme.size.touchTarget, justifyContent: 'center', alignSelf: 'flex-start' }}>
-        <MaterialCommunityIcons name="arrow-left" size={theme.size.supportActionIcon} color={theme.colors.primary} />
-      </Pressable>
-      <Text style={{ color: theme.colors.textPrimary, fontFamily: theme.fontFamily.bold, fontSize: theme.typography.overlayTitle.fontSize, lineHeight: theme.typography.overlayTitle.lineHeight * fontScale }}>
-        Home demo
-      </Text>
-      <Text style={{ color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular, fontSize: theme.typography.body.fontSize, lineHeight: theme.typography.body.lineHeight * fontScale }}>
-        Temporary nested route placeholder. The floating tab bar is intentionally hidden here.
-      </Text>
-    </View>
+    <AppScreen scrollable={false}>
+      <LongList
+        data={demoItems}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={<AppScreenHeader title="Support options" subtitle="Local placeholder only · no requests are sent." showBack />}
+        renderItem={({ item }) => (
+          <View style={{ minHeight: theme.size.touchTarget + theme.spacing.lg, flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md, borderRadius: theme.radius.lg, borderWidth: theme.layout.standardBorderWidth, borderColor: theme.colors.border, padding: theme.spacing.lg, backgroundColor: theme.colors.surface }}>
+            <MaterialCommunityIcons name="lifebuoy" size={theme.size.supportActionIcon} color={theme.colors.primary} />
+            <View style={{ flex: theme.layout.fill }}>
+              <Text style={{ color: theme.colors.textPrimary, fontFamily: theme.fontFamily.semibold, fontSize: theme.typography.body.fontSize }}>{item.title}</Text>
+              <Text style={{ color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular, fontSize: theme.typography.caption.fontSize, lineHeight: theme.typography.caption.lineHeight * fontScale }}>{item.detail}</Text>
+            </View>
+          </View>
+        )}
+        ListEmptyComponent={<EmptyState title="No support options" message="There are no local demo items to show." />}
+      />
+    </AppScreen>
   );
 }

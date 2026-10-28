@@ -52,6 +52,7 @@ export type ThemeTokens = {
     sheetHandleWidth: number;
     sheetHandleThickness: number;
     loaderSpinner: number;
+    scrollToTop: number;
   };
   layout: {
     fill: number;
@@ -64,6 +65,12 @@ export type ThemeTokens = {
     noBorder: number;
     sheetDismissRatio: number;
     sheetDismissVelocity: number;
+    floatingStageHeight: number;
+    floatingContentClearance: number;
+    scrollVisibilityThreshold: number;
+    scrollDirectionHysteresis: number;
+    floatingBottomOffsetIOS: number;
+    floatingBottomOffsetAndroid: number;
   };
   fontFamily: {
     regular: string;
@@ -89,12 +96,14 @@ export type ThemeTokens = {
     disabled: number;
     pressed: number;
     muted: number;
+    hidden: number;
   };
   motion: {
     normalScale: number;
     pressedScale: number;
     springSpeed: number;
     springBounciness: number;
+    presenceDurationMs: number;
   };
   radius: {
     sm: number;
@@ -132,6 +141,7 @@ const sharedTokens = {
     sheetHandleWidth: 36,
     sheetHandleThickness: 4,
     loaderSpinner: 32,
+    scrollToTop: 56,
   },
   layout: {
     fill: 1,
@@ -144,6 +154,12 @@ const sharedTokens = {
     noBorder: 0,
     sheetDismissRatio: 0.18,
     sheetDismissVelocity: 0.7,
+    floatingStageHeight: 64,
+    floatingContentClearance: 116,
+    scrollVisibilityThreshold: 28,
+    scrollDirectionHysteresis: 20,
+    floatingBottomOffsetIOS: 10,
+    floatingBottomOffsetAndroid: 12,
   },
   fontFamily: {
     regular: 'Inter_400Regular',
@@ -164,8 +180,8 @@ const sharedTokens = {
     footerLabel: { fontSize: 10, lineHeight: 14, letterSpacing: 1 },
     overlayTitle: { fontSize: 19, lineHeight: 27 },
   },
-  opacity: { full: 1, disabled: 0.42, pressed: 0.72, muted: 0.64 },
-  motion: { normalScale: 1, pressedScale: 0.92, springSpeed: 30, springBounciness: 5 },
+  opacity: { full: 1, disabled: 0.42, pressed: 0.72, muted: 0.64, hidden: 0 },
+  motion: { normalScale: 1, pressedScale: 0.92, springSpeed: 30, springBounciness: 5, presenceDurationMs: 220 },
   radius: { sm: 8, md: 14, lg: 16, xl: 24, pill: 999 },
 } as const;
 
