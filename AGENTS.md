@@ -269,3 +269,15 @@ Record approved durable app decisions in the project's `AGENTS.md` or the app's 
 - Inter remains the typography family; `@expo/vector-icons` remains the icon system. Theme controls use native `Animated` feedback and accessible touch targets.
 - The production landing screen remains a support prototype, not a theme-token gallery.
 - Phase validation: TypeScript check, iOS and Android Expo exports, and `git diff --check`; verify light/dark system appearance, manual override/reset, status-bar contrast, safe-area layout, and large-text behavior manually on iOS and Android.
+
+### Phase 3 — Shared overlay capabilities and audit screen — Approved
+
+- Use a typed `useOverlay()` API backed by a separate context contract, `OverlayProvider`, and one root `OverlayHost`. Supported surfaces are alert, confirmation, destructive confirmation, custom modal, bottom sheet, blocking loader, and toast.
+- Retain overlay content through exit animation. Route backdrop, hardware-back, action, and sheet-drag dismissal through one idempotent lifecycle; completion callbacks run once after exit. Confirmations and custom content use `dismiss(onComplete)` when follow-up work must wait for exit.
+- Dialogs use a preferred width capped to the viewport. Backdrop taps cancel dismissible overlays; full-screen overlay wrappers use `pointerEvents="box-none"` so outside taps reach the backdrop. Loaders remain blocking and close only through the API or configured duration.
+- Bottom sheets use a 44-point handle-only drag target, React Native `PanResponder`, 18% height / 0.7 velocity dismissal thresholds, and bottom-inset-aware content. Toasts render above routes, respect the top inset, and replace/dismiss through provider-owned timers while retaining exit animation.
+- The root status bar uses readable light icons while blocking overlays are active. Theme overlay tokens include backdrop and semantic success, danger, warning, and info colors with soft variants.
+- For Android full-window modals, use React Native `Modal` with `statusBarTranslucent` and `navigationBarTranslucent`. Expo SDK 58 / Android 16 does not support configuring `android.edgeToEdgeEnabled`; do not add it. Verify system-bar coverage in a rebuilt Android app.
+- `userInterfaceStyle` is `automatic`; `expo-system-ui` is required for Android system appearance behavior.
+- The LandingScreen is an intentional scrollable manual-audit surface listing all app metadata, both color palettes, all theme-token groups, and interactive overlay examples. The same local OptionPicker demo appears in the custom modal and sheet; sample choices are ephemeral, do not persist, and do not call a backend.
+- Phase validation: TypeScript check, `npx expo install --check`, public Expo config inspection, iOS/Android exports, and `git diff --check`. Manually verify backdrop and hardware-back cancellation, callback idempotence, sheet drag and safe-area behavior, toast replacement, light/dark status-bar contrast, and Android system-bar coverage in a rebuilt app.

@@ -17,6 +17,16 @@ export type ThemeTokens = {
     textSecondary: string;
     textMuted: string;
     focus: string;
+    overlayBackdrop: string;
+    success: string;
+    successSoft: string;
+    danger: string;
+    dangerSoft: string;
+    onDanger: string;
+    warning: string;
+    warningSoft: string;
+    info: string;
+    infoSoft: string;
   };
   spacing: {
     xs: number;
@@ -36,6 +46,12 @@ export type ThemeTokens = {
     messageIcon: number;
     supportActionIcon: number;
     themeToggleIcon: number;
+    dialogPreferredWidth: number;
+    overlayActionHeight: number;
+    sheetHandleHeight: number;
+    sheetHandleWidth: number;
+    sheetHandleThickness: number;
+    loaderSpinner: number;
   };
   layout: {
     fill: number;
@@ -45,6 +61,9 @@ export type ThemeTokens = {
     screenBottom: number;
     standardBorderWidth: number;
     focusBorderWidth: number;
+    noBorder: number;
+    sheetDismissRatio: number;
+    sheetDismissVelocity: number;
   };
   fontFamily: {
     regular: string;
@@ -63,6 +82,7 @@ export type ThemeTokens = {
     supportTitle: { fontSize: number; lineHeight: number };
     supportCaption: { fontSize: number; lineHeight: number };
     footerLabel: { fontSize: number; lineHeight: number; letterSpacing: number };
+    overlayTitle: { fontSize: number; lineHeight: number };
   };
   opacity: {
     full: number;
@@ -106,6 +126,12 @@ const sharedTokens = {
     messageIcon: 25,
     supportActionIcon: 22,
     themeToggleIcon: 21,
+    dialogPreferredWidth: 420,
+    overlayActionHeight: 48,
+    sheetHandleHeight: 44,
+    sheetHandleWidth: 36,
+    sheetHandleThickness: 4,
+    loaderSpinner: 32,
   },
   layout: {
     fill: 1,
@@ -115,6 +141,9 @@ const sharedTokens = {
     screenBottom: 28,
     standardBorderWidth: 1,
     focusBorderWidth: 2,
+    noBorder: 0,
+    sheetDismissRatio: 0.18,
+    sheetDismissVelocity: 0.7,
   },
   fontFamily: {
     regular: 'Inter_400Regular',
@@ -133,6 +162,7 @@ const sharedTokens = {
     supportTitle: { fontSize: 14, lineHeight: 20 },
     supportCaption: { fontSize: 11, lineHeight: 16 },
     footerLabel: { fontSize: 10, lineHeight: 14, letterSpacing: 1 },
+    overlayTitle: { fontSize: 19, lineHeight: 27 },
   },
   opacity: { full: 1, disabled: 0.42, pressed: 0.72, muted: 0.64 },
   motion: { normalScale: 1, pressedScale: 0.92, springSpeed: 30, springBounciness: 5 },
@@ -155,6 +185,16 @@ const lightTheme: ThemeTokens = {
     textSecondary: '#52677D',
     textMuted: '#687D91',
     focus: '#0057B8',
+    overlayBackdrop: 'rgba(6, 22, 40, 0.64)',
+    success: '#18794E',
+    successSoft: '#E6F4EC',
+    danger: '#C62F3A',
+    dangerSoft: '#FCEBEC',
+    onDanger: '#FFFFFF',
+    warning: '#956500',
+    warningSoft: '#FFF5D8',
+    info: '#175CD3',
+    infoSoft: '#EAF2FF',
   },
   shadow: {
     card: {
@@ -183,6 +223,16 @@ const darkTheme: ThemeTokens = {
     textSecondary: '#C2D0DE',
     textMuted: '#9BAFC2',
     focus: '#8CC4FF',
+    overlayBackdrop: 'rgba(0, 0, 0, 0.72)',
+    success: '#4ADE80',
+    successSoft: '#143824',
+    danger: '#FF7B83',
+    dangerSoft: '#472126',
+    onDanger: '#2A080D',
+    warning: '#FACC4F',
+    warningSoft: '#403515',
+    info: '#7AB7FF',
+    infoSoft: '#172D46',
   },
   shadow: {
     card: {

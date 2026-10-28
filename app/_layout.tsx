@@ -9,7 +9,10 @@ import {
 import { Stack, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { OverlayHost } from '../src/components/overlay/overlayHost';
+import { OverlayProvider } from '../src/contexts/overlayProvider';
 import { ThemeProvider } from '../src/contexts/themeContext';
+import { useOverlay } from '../src/hooks/useOverlay';
 import { useTheme } from '../src/hooks/useTheme';
 
 SplashScreen.preventAutoHideAsync();
@@ -35,7 +38,10 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <RootNavigation />
+        <OverlayProvider>
+          <RootNavigation />
+          <OverlayHost />
+        </OverlayProvider>
       </ThemeProvider>
     </SafeAreaProvider>
   );
@@ -43,13 +49,14 @@ export default function RootLayout() {
 
 function RootNavigation() {
   const { mode, theme } = useTheme();
+  const { isOverlayActive } = useOverlay();
 
   return (
     <SafeAreaView
       edges={['top']}
       style={{ flex: 1, backgroundColor: theme.colors.background }}
     >
-      <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+      <StatusBar style={isOverlayActive || mode === 'dark' ? 'light' : 'dark'} />
       <Stack
         screenOptions={{
           headerShown: false,
