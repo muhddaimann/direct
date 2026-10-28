@@ -1,15 +1,20 @@
 {
   "expo": {
-    "name": "direct",
+    "name": "Direct",
+    "description": "A CelcomDigi mobile app prototype that brings customer support directly into the app through a native IMR and live chat experience.",
     "slug": "direct",
-    "version": "1.0.0",
+    "scheme": "direct",
+    "version": "0.0.0",
+    "platforms": ["ios", "android"],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
+      "bundleIdentifier": "com.celcomdigi.direct",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.celcomdigi.direct",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -18,8 +23,16 @@
       },
       "predictiveBackGestureEnabled": false
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "asyncRoutes": {
+            "web": false
+          }
+        }
+      ],
+      "expo-font"
+    ]
   }
 }
