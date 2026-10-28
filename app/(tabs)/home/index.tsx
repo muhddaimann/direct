@@ -1,38 +1,37 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View, useWindowDimensions } from 'react-native';
-import { AuthSignOutButton } from '../../../src/components/auth/authComponents';
 import { AppScreen } from '../../../src/components/shared/appScreen';
 import { OptionPicker, type PickerOption } from '../../../src/components/shared/optionPicker';
+import { profileConfig } from '../../../src/constants/profile';
+import { useAuth } from '../../../src/hooks/useAuth';
 import { useOverlay } from '../../../src/hooks/useOverlay';
 import { useTheme } from '../../../src/hooks/useTheme';
 
-const quickActions: (PickerOption & { href: '/(tabs)/home/demo'; navigation: 'push' } | PickerOption & { href: '/(tabs)/settings'; navigation: 'replace' })[] = [
-  { id: 'support', label: 'Support options', description: 'Explore the local support placeholder', href: '/(tabs)/home/demo', navigation: 'push' },
-  { id: 'settings', label: 'Settings', description: 'Open app preferences', href: '/(tabs)/settings', navigation: 'replace' },
+const profileActions: PickerOption[] = [
+  { id: 'profile', label: 'Manage Profile', description: 'View and edit your demo profile', icon: profileConfig.icon },
+  { id: 'logout', label: 'Log out', description: 'End this local demo session', icon: 'logout', tone: 'danger' },
 ];
 
 export default function HomeScreen() {
   const router = useRouter();
   const overlay = useOverlay();
+  const { signOut } = useAuth();
   const { theme } = useTheme();
   const { fontScale } = useWindowDimensions();
 
   const openQuickActions = () => overlay.modal({
-    title: 'Quick actions',
-    message: 'Choose where you would like to go.',
+    title: 'Account',
+    message: 'Manage your profile or end this demo session.',
     content: (
       <OptionPicker
         mode="action"
-        options={quickActions}
+        options={profileActions}
         onSelect={(option) => {
-          const destination = quickActions.find((action) => action.id === option.id);
-          if (destination) {
-            overlay.dismiss(() => {
-              if (destination.navigation === 'push') router.push(destination.href);
-              else router.replace(destination.href);
-            });
-          }
+          overlay.dismiss(() => {
+            if (option.id === 'profile') router.push('/(tabs)/settings/profile');
+            if (option.id === 'logout') void signOut();
+          });
         }}
       />
     ),
@@ -45,7 +44,7 @@ export default function HomeScreen() {
       rightSlot={(
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Open quick actions"
+          accessibilityLabel="Open account actions"
           onPress={openQuickActions}
           style={({ pressed }) => ({
             width: theme.size.touchTarget,
@@ -57,7 +56,7 @@ export default function HomeScreen() {
             opacity: pressed ? theme.opacity.pressed : theme.opacity.full,
           })}
         >
-          <MaterialCommunityIcons name="dots-horizontal" size={theme.size.supportActionIcon} color={theme.colors.primary} />
+          <MaterialCommunityIcons name={profileConfig.icon} size={theme.size.supportActionIcon} color={theme.mode === 'light' ? profileConfig.accent : theme.colors.primary} />
         </Pressable>
       )}
     >
@@ -80,7 +79,7 @@ export default function HomeScreen() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Open support options"
-          onPress={openQuickActions}
+          onPress={() => router.push('/(tabs)/home/demo')}
           style={({ pressed }) => ({ minHeight: theme.size.touchTarget + theme.spacing.lg, flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md, borderRadius: theme.radius.lg, borderWidth: theme.layout.standardBorderWidth, borderColor: theme.colors.border, padding: theme.spacing.lg, backgroundColor: theme.colors.surface, opacity: pressed ? theme.opacity.pressed : theme.opacity.full })}
         >
           <MaterialCommunityIcons name="message-text-outline" size={theme.size.supportActionIcon} color={theme.colors.primary} />
@@ -91,7 +90,6 @@ export default function HomeScreen() {
           <MaterialCommunityIcons name="chevron-right" size={theme.size.supportActionIcon} color={theme.colors.textMuted} />
         </Pressable>
       </View>
-      <AuthSignOutButton />
     </AppScreen>
   );
 }

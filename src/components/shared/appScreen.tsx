@@ -1,10 +1,11 @@
 import { useFocusEffect, usePathname, useRouter } from 'expo-router';
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useRef, type ReactNode } from 'react';
 import { Animated, Pressable, RefreshControl, ScrollView, Text, View, useWindowDimensions, type ScrollViewInstance } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FloatingControlStage } from '../tabs/floatingControlStage';
 import { useBar } from '../../hooks/useBar';
 import { useTheme } from '../../hooks/useTheme';
+import { useScreenPresence } from '../../helpers/animate';
 
 export function AppScreen({
   title,
@@ -30,8 +31,7 @@ export function AppScreen({
   const bar = useBar();
   const { fontScale } = useWindowDimensions();
   const scrollRef = useRef<ScrollViewInstance>(null);
-  const [entered, setEntered] = useState(false);
-  const presence = useRef(new Animated.Value(0)).current;
+  const presenceStyle = useScreenPresence(theme.motion.presenceDurationMs, theme.spacing.md, theme.motion.normalScale);
   const isRootTab = pathname === '/home' || pathname === '/settings';
   useFocusEffect(useCallback(() => {
     bar.setActivePath(pathname);
@@ -45,16 +45,6 @@ export function AppScreen({
     };
   }, [bar.registerScrollController, bar.setActivePath, pathname, scrollable]));
 
-  useEffect(() => {
-    if (entered) return;
-    setEntered(true);
-    Animated.timing(presence, {
-      toValue: theme.motion.normalScale,
-      duration: theme.motion.presenceDurationMs,
-      useNativeDriver: true,
-    }).start();
-  }, [entered, presence, theme.motion.normalScale, theme.motion.presenceDurationMs]);
-
   const header = title || subtitle || rightSlot || showBack
     ? <AppScreenHeader title={title} subtitle={subtitle} showBack={showBack} rightSlot={rightSlot} />
     : null;
@@ -63,8 +53,7 @@ export function AppScreen({
     <Animated.View
       style={{
         flex: theme.layout.fill,
-        opacity: presence,
-        transform: [{ translateY: presence.interpolate({ inputRange: [0, 1], outputRange: [theme.spacing.md, 0] }) }],
+        ...presenceStyle,
         backgroundColor: theme.colors.background,
       }}
     >

@@ -13,6 +13,7 @@ import { OverlayHost } from '../src/components/overlay/overlayHost';
 import { OverlayProvider } from '../src/contexts/overlayProvider';
 import { BarProvider } from '../src/contexts/barContext';
 import { AuthProvider } from '../src/contexts/authContext';
+import { ProfileProvider } from '../src/contexts/profileContext';
 import { ThemeProvider } from '../src/contexts/themeContext';
 import { useOverlay } from '../src/hooks/useOverlay';
 import { useTheme } from '../src/hooks/useTheme';
@@ -43,8 +44,10 @@ export default function RootLayout() {
         <BarProvider>
           <OverlayProvider>
             <AuthProvider>
-              <RootNavigation />
-              <OverlayHost />
+              <ProfileProvider>
+                <RootNavigation />
+                <OverlayHost />
+              </ProfileProvider>
             </AuthProvider>
           </OverlayProvider>
         </BarProvider>

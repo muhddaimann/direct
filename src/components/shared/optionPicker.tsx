@@ -2,7 +2,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Pressable, Text, View, useWindowDimensions } from 'react-native';
 import { useTheme } from '../../hooks/useTheme';
 
-export type PickerOption = { id: string; label: string; description?: string };
+export type PickerOption = {
+  id: string;
+  label: string;
+  description?: string;
+  icon?: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
+  tone?: 'default' | 'danger';
+};
 
 export function OptionPicker({
   options,
@@ -55,6 +61,8 @@ export function OptionPicker({
             </View>
             {mode === 'preference' ? (
               <MaterialCommunityIcons name={selected ? 'radiobox-marked' : 'radiobox-blank'} size={theme.size.supportActionIcon} color={selected ? theme.colors.primary : theme.colors.textMuted} />
+            ) : option.icon ? (
+              <MaterialCommunityIcons name={option.icon} size={theme.size.supportActionIcon} color={option.tone === 'danger' ? theme.colors.danger : theme.colors.primary} />
             ) : (
               <MaterialCommunityIcons name="chevron-right" size={theme.size.supportActionIcon} color={theme.colors.primary} />
             )}

@@ -1,8 +1,8 @@
 # Expo Native AI Development Guidance
 
-Feature: Auth Module
+Feature: Profile Module
 Status: Approved
-Scope: Replace the root audit screen with a clearly non-production phone/OTP mock login, one-hour SecureStore session, guarded tabs, and shared auth actions.
+Scope: Refine Home actions with a profile-icon menu for Manage Profile and overlay-dismissal-safe logout.
 
 ## 1. Purpose and Applicability
 
@@ -312,3 +312,12 @@ Record approved durable app decisions in the project's `AGENTS.md` or the app's 
 - SecureStore protects local values but does not make this mock flow production authentication. Android SecureStore data is removed on uninstall; iOS Keychain values may survive reinstall with the same bundle ID, so always enforce the stored expiry. The `expo-secure-store` config plugin is enabled; verify native behavior in rebuilt iOS and Android apps.
 - Shared auth UI components may be used in Home and Settings. Home and Settings provide sign-out actions; Settings displays local demo session expiry. No biometric prompt is enabled.
 - Feature validation: TypeScript, Expo dependency/config checks, iOS and Android exports, and `git diff --check`. Manually verify valid/invalid phone and OTP flows, session restoration and one-hour expiry across restart/resume, sign-out, route guarding, SecureStore failures, accessibility, and large-text behavior on iOS and Android.
+
+### Feature — Profile Module — Approved
+
+- Replace the generic Settings demo route with `/settings/profile`. Use `src/constants/profile.ts` for profile types, fictional fixture data, module icon, and prototype accent; use `ProfileProvider` / `useProfile()` for profile edits and `components/profile/` for the Settings summary and editor.
+- The demo profile has editable display name and email and a fixed fictional account label. Profile data is in-memory only; it resets to the fictional fixture on sign-in/session change, sign-out/expiry, and app restart. Do not persist real profile details or send/sync profile changes to a backend.
+- Profile update validation and success feedback use `useOverlay()`. The profile route uses the shared `AppScreen`; its title uses the shared heading style and short subtitle. The Save action is in the header and enabled only when trimmed name or email differs from current profile values. Validation runs on save.
+- `AppScreen` entrance fade/slide behavior is reusable through `src/helpers/animate.ts` and remains theme-token-driven.
+- Home's header action uses the Profile module icon and opens an account picker with Manage Profile and Log out actions. Picker actions show their module/logout icons in place of chevrons. Profile navigation and `useAuth().signOut()` run after overlay dismissal. The Home support card navigates to its support placeholder directly; there is no duplicate standalone Home sign-out row.
+- Feature validation: TypeScript, iOS and Android Expo exports, and `git diff --check`. Manually verify dirty-state Save activation, profile validation/update/reset, modal-exit ordering, Profile navigation/back behavior, logout/one-hour auth-session cleanup, accessibility, and large-text layout on iOS and Android.
