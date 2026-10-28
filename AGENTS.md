@@ -260,3 +260,12 @@ Record approved durable app decisions in the project's `AGENTS.md` or the app's 
 - Safe-area ownership: root layout owns the top safe area; screens do not add duplicate top-safe-area padding by default.
 - Suggested iOS bundle identifier and Android package: `com.celcomdigi.direct`. Confirm namespace ownership and store availability before publishing.
 - Foundation validation: TypeScript check, iOS and Android Expo exports, public config check for native-only platforms, and `git diff --check`. Simulator/device behavior must be reported separately as manual verification.
+
+### Phase 2 — Theme foundation — Approved
+
+- Use typed semantic light/dark tokens from `src/constants/theme.ts`; app UI components consume named theme tokens rather than defining visual dimensions or styles with ad hoc numeric literals.
+- Theme mode follows the device appearance until a manual choice is made. Manual mode is in-memory for the current session only and is not persisted.
+- The root hierarchy owns theme context, root background, status-bar contrast, and the single top-safe-area wrapper. Routes do not duplicate root safe-area padding by default.
+- Inter remains the typography family; `@expo/vector-icons` remains the icon system. Theme controls use native `Animated` feedback and accessible touch targets.
+- The production landing screen remains a support prototype, not a theme-token gallery.
+- Phase validation: TypeScript check, iOS and Android Expo exports, and `git diff --check`; verify light/dark system appearance, manual override/reset, status-bar contrast, safe-area layout, and large-text behavior manually on iOS and Android.

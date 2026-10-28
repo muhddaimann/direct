@@ -1,8 +1,16 @@
 import { useEffect } from 'react';
-import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  useFonts,
+} from '@expo-google-fonts/inter';
 import { Stack, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { ThemeProvider } from '../src/contexts/themeContext';
+import { useTheme } from '../src/hooks/useTheme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,10 +34,28 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: '#F5F8FC' }}>
-        <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false }} />
-      </SafeAreaView>
+      <ThemeProvider>
+        <RootNavigation />
+      </ThemeProvider>
     </SafeAreaProvider>
+  );
+}
+
+function RootNavigation() {
+  const { mode, theme } = useTheme();
+
+  return (
+    <SafeAreaView
+      edges={['top']}
+      style={{ flex: 1, backgroundColor: theme.colors.background }}
+    >
+      <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: theme.colors.background },
+        }}
+      />
+    </SafeAreaView>
   );
 }
