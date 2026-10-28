@@ -12,6 +12,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { OverlayHost } from '../src/components/overlay/overlayHost';
 import { OverlayProvider } from '../src/contexts/overlayProvider';
 import { BarProvider } from '../src/contexts/barContext';
+import { AuthProvider } from '../src/contexts/authContext';
 import { ThemeProvider } from '../src/contexts/themeContext';
 import { useOverlay } from '../src/hooks/useOverlay';
 import { useTheme } from '../src/hooks/useTheme';
@@ -41,8 +42,10 @@ export default function RootLayout() {
       <ThemeProvider>
         <BarProvider>
           <OverlayProvider>
-            <RootNavigation />
-            <OverlayHost />
+            <AuthProvider>
+              <RootNavigation />
+              <OverlayHost />
+            </AuthProvider>
           </OverlayProvider>
         </BarProvider>
       </ThemeProvider>

@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View, useWindowDimensions } from 'react-native';
+import { AuthSignOutButton } from '../../../src/components/auth/authComponents';
 import { AppScreen } from '../../../src/components/shared/appScreen';
 import { OptionPicker, type PickerOption } from '../../../src/components/shared/optionPicker';
 import { useOverlay } from '../../../src/hooks/useOverlay';
@@ -90,6 +91,7 @@ export default function HomeScreen() {
           <MaterialCommunityIcons name="chevron-right" size={theme.size.supportActionIcon} color={theme.colors.textMuted} />
         </Pressable>
       </View>
+      <AuthSignOutButton />
     </AppScreen>
   );
 }

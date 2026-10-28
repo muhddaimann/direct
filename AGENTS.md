@@ -1,5 +1,9 @@
 # Expo Native AI Development Guidance
 
+Feature: Auth Module
+Status: Approved
+Scope: Replace the root audit screen with a clearly non-production phone/OTP mock login, one-hour SecureStore session, guarded tabs, and shared auth actions.
+
 ## 1. Purpose and Applicability
 
 This file provides reusable guidance for AI-assisted **native-only Expo and React Native development on iOS and Android**. It is intended to be placed directly in an app repository and used on its own by an AI agent; all collaboration and technical guidance needed for this workflow is included here. Web is not a target platform.
@@ -298,3 +302,13 @@ Record approved durable app decisions in the project's `AGENTS.md` or the app's 
 - Use `useOverlay()` directly. Home quick-action selection waits for custom-modal exit using `dismiss(onComplete)`; support navigation pushes the nested demo to preserve Home history, while Settings is a tab replacement. Back controls fall back to the corresponding tab root when no back history exists.
 - Settings appearance selection uses the existing bottom sheet and `OptionPicker`; it updates theme mode in memory for the current session only and is not persisted. Picker samples and support destinations remain local prototypes and do not call a backend.
 - Phase validation: TypeScript check, iOS and Android Expo exports, and `git diff --check`. Manually verify picker selection/dismissal and post-exit navigation, back behavior including direct nested-route entry, focused scroll ownership, floating-control visibility/scroll-to-top/fade interaction, large-text layout, and iOS/Android safe-area placement.
+
+### Feature — Auth Module — Approved
+
+- The root route `/` is the LoginScreen. An `AuthProvider` is mounted beneath `OverlayProvider`, exposes auth flow and session state through `useAuth()`, and uses `useOverlay()` for eligibility, OTP, persistence, expiry, and sign-out feedback. Tabs require a restored, unexpired session.
+- This is a conspicuously non-production local demo. The only eligible phone fixture is the synthetic, invalid `0000000000`; all other phone values show a not-a-CelcomDigi-user message. This does not verify real eligibility, send SMS, or call a backend.
+- OTPs are generated at runtime and kept in memory only; they are displayed with a “not sent” label for this demo. Never commit a fixed OTP, real phone number, raw credential, or production token. Clear the challenge after verification, reset, or sign-out.
+- Successful demo verification stores only `createdAt`, `expiresAt`, and a non-production marker in `expo-secure-store`; do not persist the entered phone number or OTP. The session lifetime is one hour and expiry is checked on restoration, while the app is active, and when returning to foreground. Sign-out deletes the stored session; if deletion fails, remain signed in and report the error.
+- SecureStore protects local values but does not make this mock flow production authentication. Android SecureStore data is removed on uninstall; iOS Keychain values may survive reinstall with the same bundle ID, so always enforce the stored expiry. The `expo-secure-store` config plugin is enabled; verify native behavior in rebuilt iOS and Android apps.
+- Shared auth UI components may be used in Home and Settings. Home and Settings provide sign-out actions; Settings displays local demo session expiry. No biometric prompt is enabled.
+- Feature validation: TypeScript, Expo dependency/config checks, iOS and Android exports, and `git diff --check`. Manually verify valid/invalid phone and OTP flows, session restoration and one-hour expiry across restart/resume, sign-out, route guarding, SecureStore failures, accessibility, and large-text behavior on iOS and Android.

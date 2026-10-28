@@ -4,8 +4,11 @@
     "description": "A CelcomDigi mobile app prototype that brings customer support directly into the app through a native IMR and live chat experience.",
     "slug": "direct",
     "scheme": "direct",
-    "version": "0.1.0",
-    "platforms": ["ios", "android"],
+    "version": "0.2.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -32,7 +35,8 @@
           }
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-secure-store"
     ]
   }
 }

@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View, useWindowDimensions } from 'react-native';
+import { AuthSessionCard, AuthSignOutButton } from '../../../src/components/auth/authComponents';
 import { AppScreen } from '../../../src/components/shared/appScreen';
 import { OptionPicker, type PickerOption } from '../../../src/components/shared/optionPicker';
 import { useOverlay } from '../../../src/hooks/useOverlay';
@@ -34,6 +35,7 @@ export default function SettingsScreen() {
 
   return (
     <AppScreen title="Settings" subtitle="Preferences for this session.">
+      <AuthSessionCard />
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={`Appearance, currently ${mode}. Choose appearance.`}
@@ -57,6 +59,7 @@ export default function SettingsScreen() {
         <Text style={{ flex: theme.layout.fill, color: theme.colors.textPrimary, fontFamily: theme.fontFamily.semibold, fontSize: theme.typography.body.fontSize }}>Settings demo</Text>
         <MaterialCommunityIcons name="chevron-right" size={theme.size.supportActionIcon} color={theme.colors.textMuted} />
       </Pressable>
+      <AuthSignOutButton />
     </AppScreen>
   );
 }
