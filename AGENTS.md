@@ -1,8 +1,8 @@
 # Expo Native AI Development Guidance
 
-Feature: Profile Module
+Feature: Chat Module
 Status: Approved
-Scope: Refine Home actions with a profile-icon menu for Manage Profile and overlay-dismissal-safe logout.
+Scope: Replace Home's generic support placeholder with a terms-acknowledged, choice-based local chat simulation.
 
 ## 1. Purpose and Applicability
 
@@ -321,3 +321,12 @@ Record approved durable app decisions in the project's `AGENTS.md` or the app's 
 - `AppScreen` entrance fade/slide behavior is reusable through `src/helpers/animate.ts` and remains theme-token-driven.
 - Home's header action uses the Profile module icon and opens an account picker with Manage Profile and Log out actions. Picker actions show their module/logout icons in place of chevrons. Profile navigation and `useAuth().signOut()` run after overlay dismissal. The Home support card navigates to its support placeholder directly; there is no duplicate standalone Home sign-out row.
 - Feature validation: TypeScript, iOS and Android Expo exports, and `git diff --check`. Manually verify dirty-state Save activation, profile validation/update/reset, modal-exit ordering, Profile navigation/back behavior, logout/one-hour auth-session cleanup, accessibility, and large-text layout on iOS and Android.
+
+### Feature — Chat Module — Approved
+
+- Replace the Home support placeholder route with `/home/chat`; provide `/home/chat/record` for chat records. Keep chat fixtures, types, icon/accent, local-only notice, response delay, and transcript formatting in `src/constants/chat.ts`; use `ChatProvider` / `useChat()` for shared session state and `src/components/chat/` for Home and conversation UI.
+- Home's **Chat us** action requires acknowledgement through `useOverlay().confirm()` before creating a new session. Create the session and navigate only after confirmation overlay exit; cancellation creates no session. Continue an existing active session without prompting again. Home quick actions also include Manage Chat.
+- Keep at most one active simulated session and show active/inactive records. Selecting a record opens that exact session; inactive transcripts are read-only. Completed or ended sessions remain in memory for the signed-in session; end moves a session to inactive rather than erasing it. Restart clears the selected transcript and restarts its simulated greeting.
+- Chat supports local free-text messages, scripted quick replies, message timestamps, and a short simulated typing delay with canned responses. Messages and records are never uploaded, persisted, or sent to a live agent/backend. Warn users to avoid personal/account details; clear all chat state on sign-out/session expiry or app restart.
+- Sharing is an explicit user action through React Native's native share sheet and exports a transcript clearly labeled as simulated. Do not share automatically; warn that shared content leaves the app.
+- Validate with TypeScript, Expo dependency/config checks, iOS and Android exports, and `git diff --check`. Manually verify acknowledgement confirmation/cancellation and post-exit navigation, active/inactive filtering, session routing, delayed replies, keyboard/safe-area behavior, share dismissal/selection, accessibility, and large-text layout on iOS and Android.

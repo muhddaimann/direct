@@ -14,6 +14,7 @@ import { OverlayProvider } from '../src/contexts/overlayProvider';
 import { BarProvider } from '../src/contexts/barContext';
 import { AuthProvider } from '../src/contexts/authContext';
 import { ProfileProvider } from '../src/contexts/profileContext';
+import { ChatProvider } from '../src/contexts/chatContext';
 import { ThemeProvider } from '../src/contexts/themeContext';
 import { useOverlay } from '../src/hooks/useOverlay';
 import { useTheme } from '../src/hooks/useTheme';
@@ -45,8 +46,10 @@ export default function RootLayout() {
           <OverlayProvider>
             <AuthProvider>
               <ProfileProvider>
-                <RootNavigation />
-                <OverlayHost />
+                <ChatProvider>
+                  <RootNavigation />
+                  <OverlayHost />
+                </ChatProvider>
               </ProfileProvider>
             </AuthProvider>
           </OverlayProvider>

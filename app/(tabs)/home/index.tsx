@@ -2,13 +2,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View, useWindowDimensions } from 'react-native';
 import { AppScreen } from '../../../src/components/shared/appScreen';
+import { ChatHomeSection } from '../../../src/components/chat/chatHomeSection';
 import { OptionPicker, type PickerOption } from '../../../src/components/shared/optionPicker';
+import { chatConfig } from '../../../src/constants/chat';
 import { profileConfig } from '../../../src/constants/profile';
 import { useAuth } from '../../../src/hooks/useAuth';
 import { useOverlay } from '../../../src/hooks/useOverlay';
 import { useTheme } from '../../../src/hooks/useTheme';
 
-const profileActions: PickerOption[] = [
+const homeQuickActions: PickerOption[] = [
+  { id: 'chat', label: 'Manage Chat', description: 'View active and previous demo chats', icon: chatConfig.icon },
   { id: 'profile', label: 'Manage Profile', description: 'View and edit your demo profile', icon: profileConfig.icon },
   { id: 'logout', label: 'Log out', description: 'End this local demo session', icon: 'logout', tone: 'danger' },
 ];
@@ -21,14 +24,15 @@ export default function HomeScreen() {
   const { fontScale } = useWindowDimensions();
 
   const openQuickActions = () => overlay.modal({
-    title: 'Account',
-    message: 'Manage your profile or end this demo session.',
+    title: 'Quick actions',
+    message: 'Manage chat, your profile, or this demo session.',
     content: (
       <OptionPicker
         mode="action"
-        options={profileActions}
+        options={homeQuickActions}
         onSelect={(option) => {
           overlay.dismiss(() => {
+            if (option.id === 'chat') router.push('/(tabs)/home/chat/record');
             if (option.id === 'profile') router.push('/(tabs)/settings/profile');
             if (option.id === 'logout') void signOut();
           });
@@ -44,7 +48,7 @@ export default function HomeScreen() {
       rightSlot={(
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Open account actions"
+          accessibilityLabel="Open quick actions"
           onPress={openQuickActions}
           style={({ pressed }) => ({
             width: theme.size.touchTarget,
@@ -68,28 +72,11 @@ export default function HomeScreen() {
           How can we help?
         </Text>
         <Text style={{ color: theme.colors.onPrimary, fontFamily: theme.fontFamily.regular, fontSize: theme.typography.body.fontSize, lineHeight: theme.typography.body.lineHeight * fontScale, opacity: theme.opacity.muted }}>
-          Browse support options or start a conversation.
+          Start a guided support chat and return to it later.
         </Text>
       </View>
 
-      <View style={{ gap: theme.spacing.md }}>
-        <Text style={{ color: theme.colors.textPrimary, fontFamily: theme.fontFamily.bold, fontSize: theme.typography.overlayTitle.fontSize, lineHeight: theme.typography.overlayTitle.lineHeight * fontScale }}>
-          Get support
-        </Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Open support options"
-          onPress={() => router.push('/(tabs)/home/demo')}
-          style={({ pressed }) => ({ minHeight: theme.size.touchTarget + theme.spacing.lg, flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md, borderRadius: theme.radius.lg, borderWidth: theme.layout.standardBorderWidth, borderColor: theme.colors.border, padding: theme.spacing.lg, backgroundColor: theme.colors.surface, opacity: pressed ? theme.opacity.pressed : theme.opacity.full })}
-        >
-          <MaterialCommunityIcons name="message-text-outline" size={theme.size.supportActionIcon} color={theme.colors.primary} />
-          <View style={{ flex: theme.layout.fill }}>
-            <Text style={{ color: theme.colors.textPrimary, fontFamily: theme.fontFamily.semibold, fontSize: theme.typography.body.fontSize }}>Support options</Text>
-            <Text style={{ color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular, fontSize: theme.typography.caption.fontSize, lineHeight: theme.typography.caption.lineHeight * fontScale }}>Local prototype actions</Text>
-          </View>
-          <MaterialCommunityIcons name="chevron-right" size={theme.size.supportActionIcon} color={theme.colors.textMuted} />
-        </Pressable>
-      </View>
+      <ChatHomeSection />
     </AppScreen>
   );
 }
