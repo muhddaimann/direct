@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import type { ReactNode } from 'react';
 import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,6 +12,7 @@ import { useTheme } from '../src/hooks/useTheme';
 type TokenEntry = { name: string; value: string };
 
 export default function LandingScreen() {
+  const router = useRouter();
   const { theme, mode } = useTheme();
   const overlay = useOverlay();
   const { fontScale } = useWindowDimensions();
@@ -170,6 +172,35 @@ export default function LandingScreen() {
           </View>
           <ThemeToggle />
         </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Continue to Home"
+          onPress={() => router.replace('/(tabs)/home')}
+          style={({ pressed }) => ({
+            minHeight: theme.size.touchTarget,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: theme.spacing.sm,
+            marginTop: theme.spacing.lg,
+            borderRadius: theme.radius.pill,
+            paddingHorizontal: theme.spacing.lg,
+            backgroundColor: colors.secondary,
+            opacity: pressed ? theme.opacity.pressed : theme.opacity.full,
+          })}
+        >
+          <Text
+            style={{
+              color: colors.onSecondary,
+              fontFamily: theme.fontFamily.semibold,
+              fontSize: theme.typography.body.fontSize,
+              lineHeight: theme.typography.body.lineHeight * fontScale,
+            }}
+          >
+            Open Home
+          </Text>
+          <MaterialCommunityIcons name="arrow-right" size={theme.size.supportActionIcon} color={colors.onSecondary} />
+        </Pressable>
         <View
           style={{
             alignSelf: 'flex-start',
